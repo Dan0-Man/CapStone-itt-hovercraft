@@ -1,0 +1,64 @@
+//capstone hovercraft
+//A-team
+#include <PS2X_lib.h>
+PS2X ps2x;  //The PS2 Controller Class
+const int liftFanpin = 3;
+const int rightFanpin = 4;
+const int leftFanpin = 5;
+
+void setup() {
+  ps2x.config_gamepad(13,11,10,12, false, false);
+  //setup pins and settings: GamePad(clock, command, attention, data, Pressures?, Rumble?)
+  //We have disabled the pressure sensitivity and rumble in this instance and
+  //we know the controller type so we have not bothered with the error checks
+  pinMode(liftFanpin, OUTPUT);  //Sets the liftFanpin to output
+  pinMode(rightFanpin, OUTPUT);  //Sets the rightFanpin to output
+  pinMode(leftFanpin, OUTPUT);  //Sets the leftFanpin to output.
+  
+}
+
+void loop() {
+   ps2x.read_gamepad(); //This needs to be called at least once a second
+                        // to get data from the controller.
+  if(ps2x.ButtonPressed(PSB_START))  //Pressed and held
+  {
+    centerFan();
+  }
+
+  else if(ps2x.Button(PSB_GREEN))  //Pressed
+  {
+   forward();
+  }
+
+  else if(ps2x.Button(PSB_PINK))  //Pressed
+  {
+    left();
+  }
+
+
+  else if(ps2x.Button(PSB_R2))  //Pressed
+  {
+    right();
+  }
+  else  //Pressed
+  {
+    delay(100);
+  }
+
+}
+
+void centerFan() {
+  digitalWrite(liftFanpin, high); 
+  }
+void forward() {
+  digitalWrite(leftFanpin, high);
+  digitalWrite(rightFanpin, high);
+  }
+  void right() {
+  digitalWrite(leftFanpin, high);
+  digitalWrite(rightFanpin, low); 
+  }
+  void left() {
+  digitalWrite(leftFanpin, low);
+  digitalWrite(rightFanpin, high); 
+  }
